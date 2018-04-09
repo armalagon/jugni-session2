@@ -1,4 +1,4 @@
-package org.jugni.session.lecturer.resource;
+package org.jugni.session.lecturer.controller;
 
 import java.util.Collection;
 

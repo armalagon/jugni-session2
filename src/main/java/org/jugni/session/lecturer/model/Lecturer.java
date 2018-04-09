@@ -1,7 +1,9 @@
 package org.jugni.session.lecturer.model;
 
 import java.util.Objects;
-
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -13,32 +15,38 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(propOrder = {"jugNiId", "fullName", "gender"})
+@XmlType(propOrder = {"jugId", "fullName", "gender"})
 public class Lecturer {
 
     public enum Gender {
         MALE, FEMALE
     }
 
-    private String jugNiId;
+    private String jugId;
+
+    @NotNull(message = "[fullName] is required")
+    @Size(min = 5, max = 50)
+    @Pattern(regexp = "[A-Za-zÁÉÍÓÚÑáéíóúñ '-]*")
     private String fullName;
+
+    @NotNull(message = "[gender] is required")
     private Gender gender;
 
     public Lecturer() {
     }
 
     public Lecturer(String jugNiId, String fullName, Gender gender) {
-        this.jugNiId = jugNiId;
+        this.jugId = jugNiId;
         this.fullName = fullName;
         this.gender = gender;
     }
 
-    public String getJugNiId() {
-        return jugNiId;
+    public String getJugId() {
+        return jugId;
     }
 
-    public void setJugNiId(String jugNiId) {
-        this.jugNiId = jugNiId;
+    public void setJugId(String jugId) {
+        this.jugId = jugId;
     }
 
     public String getFullName() {
@@ -57,10 +65,21 @@ public class Lecturer {
         this.gender = gender;
     }
 
+    public void generateId() {
+        String[] names = fullName.split("\\s+");
+        StringBuilder initials = new StringBuilder();
+
+        for (String name : names) {
+            initials.append(name.charAt(0));
+        }
+
+        setJugId(initials.toString().toUpperCase());
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.jugNiId);
+        hash = 67 * hash + Objects.hashCode(this.jugId);
         return hash;
     }
 
@@ -76,7 +95,7 @@ public class Lecturer {
             return false;
         }
         final Lecturer other = (Lecturer) obj;
-        if (!Objects.equals(this.jugNiId, other.jugNiId)) {
+        if (!Objects.equals(this.jugId, other.jugId)) {
             return false;
         }
         return true;
@@ -84,6 +103,6 @@ public class Lecturer {
 
     @Override
     public String toString() {
-        return "Lecturer{" + "jugNiId=" + jugNiId + ", fullName=" + fullName + ", gender=" + gender + '}';
+        return "Lecturer{" + "jugNiId=" + jugId + ", fullName=" + fullName + ", gender=" + gender + '}';
     }
 }

@@ -3,5 +3,7 @@
 .project
 .settings/
 src/bin/
+#NetBeans
+nb-configuration.xml
 #Maven specific
 target/
